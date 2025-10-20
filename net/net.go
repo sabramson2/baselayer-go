@@ -1,0 +1,88 @@
+package net
+
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"time"
+)
+
+type Req struct {
+	url string
+	body string
+	headerUpdater func(*http.Header)
+}
+
+type Response struct {
+	data map[string]any
+}
+
+//----------------------------------------
+func Postjj(reqData *Req) (*Response, error) {
+	payloadReader := bytes.NewBuffer([]byte(reqData.body))
+	client := http.Client {
+		Timeout: 5 * time.Second,
+	}
+	req, _ := http.NewRequest("POST", reqData.url, payloadReader)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accepts", "application/json")
+
+	if reqData.headerUpdater != nil {
+		reqData.headerUpdater(&req.Header)
+	}
+
+	r, e := client.Do(req)
+	if e != nil { return nil, e }
+	defer r.Body.Close()
+	if !isOk(r) {
+		handleNon200(r)
+		return nil, errors.New("error, non 200 response")
+	}
+
+	result := bodyToMap(r)
+	return &Response{result}, nil
+}
+
+//----------------------------------------
+func Getj(reqData *Req) (*Response, error) {
+	client := http.Client {
+		Timeout: 5 * time.Second,
+	}
+	req, _ := http.NewRequest("GET", reqData.url, nil)
+	req.Header.Set("Accepts", "application/json")
+	if reqData.headerUpdater != nil {
+		reqData.headerUpdater(&req.Header)
+	}
+	r, e := client.Do(req)
+	if e != nil { return nil, e }
+	defer r.Body.Close()
+	if !isOk(r) {
+		handleNon200(r)
+		return nil, errors.New(fmt.Sprintf("error, non 200 response: %d", r.StatusCode))
+	}
+
+	result := bodyToMap(r)
+	return &Response{result}, nil
+}
+
+//----------------------------------------
+func handleNon200(r *http.Response) {
+	fmt.Printf("Response not ok - status = %d\n", r.StatusCode)
+	bodyBytes, _ := io.ReadAll(r.Body)
+	bodyString := string(bodyBytes)
+	fmt.Println(bodyString)
+}
+
+//----------------------------------------
+func isOk(r *http.Response) bool {
+	return r.StatusCode == http.StatusCreated || r.StatusCode == http.StatusOK
+}
+
+func bodyToMap(r *http.Response) map[string]any {
+	var result map[string]any
+	json.NewDecoder(r.Body).Decode(&result)
+	return result
+}
