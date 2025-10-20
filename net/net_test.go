@@ -14,7 +14,7 @@ func TestGet(t *testing.T) {
 	r, e := Getj(&req)
 	if e != nil { t.Errorf("error: %s", e); return }
 
-	for k, v := range r.data {
+	for k, v := range r.Data {
 		t.Logf("key: %s, value: %v\n", k, v)
 	}
 }
@@ -34,6 +34,6 @@ func TestPost(t *testing.T) {
 	r, e := Postjj(&req)
 	if e != nil { t.Errorf("error: %s", e); return }
 
-	t.Logf("a = %s\n", r.data["a"].(string))
-	t.Logf("id = %d\n", int(r.data["id"].(float64)))
+	t.Logf("a = %s\n", r.Data["a"].(string))
+	t.Logf("id = %d\n", int(r.Data["id"].(float64)))
 }

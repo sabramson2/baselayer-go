@@ -11,27 +11,27 @@ import (
 )
 
 type Req struct {
-	url string
-	body string
-	headerUpdater func(*http.Header)
+	Url string
+	Body string
+	HeaderUpdater func(*http.Header)
 }
 
 type Response struct {
-	data map[string]any
+	Data map[string]any
 }
 
 //----------------------------------------
 func Postjj(reqData *Req) (*Response, error) {
-	payloadReader := bytes.NewBuffer([]byte(reqData.body))
+	payloadReader := bytes.NewBuffer([]byte(reqData.Body))
 	client := http.Client {
 		Timeout: 5 * time.Second,
 	}
-	req, _ := http.NewRequest("POST", reqData.url, payloadReader)
+	req, _ := http.NewRequest("POST", reqData.Url, payloadReader)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accepts", "application/json")
 
-	if reqData.headerUpdater != nil {
-		reqData.headerUpdater(&req.Header)
+	if reqData.HeaderUpdater != nil {
+		reqData.HeaderUpdater(&req.Header)
 	}
 
 	r, e := client.Do(req)
@@ -51,17 +51,17 @@ func Getj(reqData *Req) (*Response, error) {
 	client := http.Client {
 		Timeout: 5 * time.Second,
 	}
-	req, _ := http.NewRequest("GET", reqData.url, nil)
+	req, _ := http.NewRequest("GET", reqData.Url, nil)
 	req.Header.Set("Accepts", "application/json")
-	if reqData.headerUpdater != nil {
-		reqData.headerUpdater(&req.Header)
+	if reqData.HeaderUpdater != nil {
+		reqData.HeaderUpdater(&req.Header)
 	}
 	r, e := client.Do(req)
 	if e != nil { return nil, e }
 	defer r.Body.Close()
 	if !isOk(r) {
 		handleNon200(r)
-		return nil, errors.New(fmt.Sprintf("error, non 200 response: %d", r.StatusCode))
+		return nil, fmt.Errorf("error, non 200 response: %d", r.StatusCode)
 	}
 
 	result := bodyToMap(r)
