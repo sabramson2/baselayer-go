@@ -14,6 +14,7 @@ func TestGet(t *testing.T) {
 	r, e := Getj(&req)
 	if e != nil { t.Errorf("error: %s", e); return }
 
+	t.Log(r)
 	for k, v := range r.Data {
 		t.Logf("key: %s, value: %v\n", k, v)
 	}

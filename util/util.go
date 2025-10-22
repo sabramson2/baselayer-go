@@ -7,39 +7,49 @@ import (
 	"os"
 )
 
+//----------------------------------------
 func UtilTest() string {
 	return "hello from util package"
 }
 
+//----------------------------------------
 func LoadConfig(envVarName string) (map[string]any, error) {
 	filePath := os.Getenv(envVarName)
 	if filePath == "" {
 		return nil, fmt.Errorf("environment variable %s is not set or empty", envVarName)
 	}
 
-	data, e := os.ReadFile(filePath)
-	if e != nil {
-		return nil, fmt.Errorf("failed to read file at path '%s': %w", filePath, e)
-	}
-	var config map[string]any
-	e = json.Unmarshal(data, &config)
-	if e != nil {
-		return nil, fmt.Errorf("failed to unmarshal JSON content: %w", e)
-	}
+	config, e := ReadFileToJson(filePath)
+	if e != nil { return nil, e }
 
 	return config, nil
 }
 
+//----------------------------------------
 func WriteFile(path string, contents string) error {
 	return os.WriteFile(path, []byte(contents), 0644)
 }
 
+//----------------------------------------
 func ReadFileToString(path string) (string, error) {
 	data, e := os.ReadFile(path)
 	if e != nil { return "", e }
 	return string(data), nil
 }
 
+//----------------------------------------
+func ReadFileToJson(path string) (map[string]any, error) {
+	data, e := os.ReadFile(path)
+	if e != nil { return nil, e }
+
+	var obj map[string]any
+	e = json.Unmarshal(data, &obj)
+	if e != nil { return nil, e }
+
+	return obj, nil
+}
+
+//----------------------------------------
 func ReadFileToLines(path string) ([]string, error) {
 	file, e := os.Open(path)
 	if e != nil { return nil, e }

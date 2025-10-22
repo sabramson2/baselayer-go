@@ -17,6 +17,7 @@ type Req struct {
 }
 
 type Response struct {
+	response *http.Response
 	Data map[string]any
 }
 
@@ -43,7 +44,7 @@ func Postjj(reqData *Req) (*Response, error) {
 	}
 
 	result := bodyToMap(r)
-	return &Response{result}, nil
+	return &Response{r, result}, nil
 }
 
 //----------------------------------------
@@ -65,7 +66,7 @@ func Getj(reqData *Req) (*Response, error) {
 	}
 
 	result := bodyToMap(r)
-	return &Response{result}, nil
+	return &Response{r, result}, nil
 }
 
 //----------------------------------------
