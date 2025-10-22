@@ -21,6 +21,11 @@ type Response struct {
 	Data map[string]any
 }
 
+type ArrayResponse struct {
+	Raw *http.Response
+	Data []any
+}
+
 //----------------------------------------
 func Postjj(reqData *Req) (*Response, error) {
 	payloadReader := bytes.NewBuffer([]byte(reqData.Body))
@@ -45,6 +50,32 @@ func Postjj(reqData *Req) (*Response, error) {
 
 	result := bodyToMap(r)
 	return &Response{r, result}, nil
+}
+
+//----------------------------------------
+func Postja(reqData *Req) (*ArrayResponse, error) {
+	payloadReader := bytes.NewBuffer([]byte(reqData.Body))
+	client := http.Client {
+		Timeout: 5 * time.Second,
+	}
+	req, _ := http.NewRequest("POST", reqData.Url, payloadReader)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accepts", "application/json")
+
+	if reqData.HeaderUpdater != nil {
+		reqData.HeaderUpdater(&req.Header)
+	}
+
+	r, e := client.Do(req)
+	if e != nil { return nil, e }
+	defer r.Body.Close()
+	if !isOk(r) {
+		handleNon200(r)
+		return nil, errors.New("error, non 200 response")
+	}
+
+	result := bodyToList(r)
+	return &ArrayResponse{r, result}, nil
 }
 
 //----------------------------------------
@@ -84,6 +115,12 @@ func isOk(r *http.Response) bool {
 
 func bodyToMap(r *http.Response) map[string]any {
 	var result map[string]any
+	json.NewDecoder(r.Body).Decode(&result)
+	return result
+}
+
+func bodyToList(r *http.Response) []any {
+	var result []any
 	json.NewDecoder(r.Body).Decode(&result)
 	return result
 }
