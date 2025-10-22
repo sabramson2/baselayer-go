@@ -17,7 +17,7 @@ type Req struct {
 }
 
 type Response struct {
-	response *http.Response
+	Raw *http.Response
 	Data map[string]any
 }
 
