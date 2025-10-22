@@ -12,6 +12,10 @@ func UtilTest() string {
 	return "hello from util package"
 }
 
+func Pe(e error) {
+	fmt.Printf("!!! error: %s\n", e)
+}
+
 //----------------------------------------
 func LoadConfig(envVarName string) (map[string]any, error) {
 	filePath := os.Getenv(envVarName)
