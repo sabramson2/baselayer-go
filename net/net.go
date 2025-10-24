@@ -27,6 +27,9 @@ type ArrayResponse struct {
 }
 
 //----------------------------------------
+// refactor post/get to allow for plugging in other response format processors
+
+//----------------------------------------
 func Postjj(reqData *Req) (*Response, error) {
 	payloadReader := bytes.NewBuffer([]byte(reqData.Body))
 	client := http.Client {

@@ -68,3 +68,10 @@ func ReadFileToLines(path string) ([]string, error) {
 	}
 	return lines, nil
 }
+
+//----------------------------------------
+func JsonToString(o any) (string, error) {
+	r, e := json.MarshalIndent(o, "", "    ")
+	if e != nil { return "", e }
+	return string(r), nil
+}
