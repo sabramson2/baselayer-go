@@ -41,3 +41,30 @@ func TestReadFileToLines(t *testing.T) {
 		t.Logf("line %d: %s\n", i, lines[i])
 	}
 }
+
+func TestStringToJson(t *testing.T) {
+	s := `{
+		"a": "foo",
+		"b": "bar",
+		"c": [
+			"1", "2", "3"
+		]
+	}`
+	r, _ := StringToJson(s)
+	t.Logf("a = %s\n", r["a"].(string))
+	js, _ := JsonToString(r)
+	t.Logf("%s\n", js)
+}
+
+func TestStringToJsonArray(t *testing.T) {
+	s := `[ "1", "2", "3" ]`
+	r, _ := StringToJsonArray(s)
+	t.Logf("elem 0 = %s\n", r[0].(string))
+	js, _ := JsonToString(r)
+	t.Logf("%s\n", js)
+}
+
+func TestArrays(t *testing.T) {
+	s := "a b c"
+	t.Logf("first = %s, second = %s, third = %s\n", StringToSliceAny(s)...)
+}

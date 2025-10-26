@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 //----------------------------------------
@@ -74,4 +75,30 @@ func JsonToString(o any) (string, error) {
 	r, e := json.MarshalIndent(o, "", "    ")
 	if e != nil { return "", e }
 	return string(r), nil
+}
+
+//----------------------------------------
+func StringToJson(s string) (map[string]any, error) {
+	var r map[string]any
+	e := json.Unmarshal([]byte(s), &r)
+	if e != nil { return nil, e }
+	return r, nil
+}
+
+//----------------------------------------
+func StringToJsonArray(s string) ([]any, error) {
+	var r []any
+	e := json.Unmarshal([]byte(s), &r)
+	if e != nil { return nil, e }
+	return r, nil
+}
+
+//----------------------------------------
+func StringToSliceAny(s string) []any {
+	parts := strings.Split(s, " ")
+	partsAny := make([]any, len(parts))
+	for i := range parts {
+		partsAny[i] = any(parts[i])
+	}
+	return partsAny
 }

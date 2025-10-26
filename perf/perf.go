@@ -40,7 +40,7 @@ func TimeItSingle(f func()) int64{
 }
 
 //----------------------------------------
-func TimeItMany(count int64, f func()) Result {
+func TimeItMany(count int64, f func()) *Result {
 	allTimes := make([]int64, count)
 
 	var sum int64
@@ -58,7 +58,7 @@ func TimeItMany(count int64, f func()) Result {
 	p90Index := int64(float64(count) * 0.9)
 	p99Index := int64(float64(count) * 0.99)
 
-	return Result {
+	return &Result {
 		count,
 		avgTime,
 		allTimes[p50Index],

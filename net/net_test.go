@@ -2,6 +2,8 @@ package net
 
 import (
 	"testing"
+
+	u "github.com/sabramson2/baselayer-go/util"
 )
 
 //----------------------------------------
@@ -37,4 +39,28 @@ func TestPost(t *testing.T) {
 
 	t.Logf("a = %s\n", r.Data["a"].(string))
 	t.Logf("id = %d\n", int(r.Data["id"].(float64)))
+}
+
+//----------------------------------------
+func TestPostString(t *testing.T) {
+	url := "https://jsonplaceholder.typicode.com/posts"
+	body := `{
+		"a": "val0",
+		"b": "val1"
+	}`
+
+	r, e := Post(url, body, Headersjj)
+	if e != nil { u.Pe(e); return }
+
+	t.Logf("response status: %d %s\n", r.R.StatusCode, r.R.Status)
+	t.Logf("response body: %s\n", r.Data)
+}
+
+func TestGetString(t *testing.T) {
+	url := "https://jsonplaceholder.typicode.com/posts/1"
+	r, e := Get(url, Headersj)
+	if e != nil { u.Pe(e); return }
+
+	t.Logf("response status: %d %s\n", r.R.StatusCode, r.R.Status)
+	t.Logf("response body: %s\n", r.Data)
 }
