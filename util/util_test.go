@@ -73,3 +73,9 @@ func TestRandNumString(t *testing.T) {
 	num := RandNumString(20)
 	t.Logf("%s\n", num)
 }
+
+func TestFormatPrinting(t *testing.T) {
+	P("foo")
+	Pf("foo %s\n", "bar")
+	Pe(Ef("some error %s", "errorfoo"))
+}

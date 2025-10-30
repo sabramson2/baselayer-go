@@ -21,7 +21,7 @@ func P(s string) {
 	fmt.Println(s)
 }
 
-func Pf(s string, args []string) {
+func Pf(s string, args ...string) {
 	fmt.Printf(s, StringSliceToSliceAny(args)...)
 }
 
@@ -29,7 +29,7 @@ func E(s string) error {
 	return fmt.Errorf(s, nil)
 }
 
-func Ef(s string, args []string) error {
+func Ef(s string, args ...string) error {
 	return fmt.Errorf(s, StringSliceToSliceAny(args)...)
 }
 
