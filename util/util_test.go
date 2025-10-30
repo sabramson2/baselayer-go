@@ -68,3 +68,8 @@ func TestArrays(t *testing.T) {
 	s := "a b c"
 	t.Logf("first = %s, second = %s, third = %s\n", StringToSliceAny(s)...)
 }
+
+func TestRandNumString(t *testing.T) {
+	num := RandNumString(20)
+	t.Logf("%s\n", num)
+}

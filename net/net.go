@@ -55,6 +55,10 @@ func Get(url string, headers map[string]string) (*StringResponse, error) {
 	return DoRequest("GET", url, "", headers)
 }
 
+func Put(url string, body string, headers map[string]string) (*StringResponse, error) {
+	return DoRequest("POST", url, body, headers)
+}
+
 //----------------------------------------
 func DoRequest(method string, url string, body string, headers map[string]string) (*StringResponse, error) {
 	var payloadReader io.Reader

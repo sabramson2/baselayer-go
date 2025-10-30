@@ -45,11 +45,29 @@ func TestPost(t *testing.T) {
 func TestPostString(t *testing.T) {
 	url := "https://jsonplaceholder.typicode.com/posts"
 	body := `{
-		"a": "val0",
-		"b": "val1"
+		"id": 1,
+		"title", "title2",
+		"body", "body2",
+		"userId": 102
 	}`
 
 	r, e := Post(url, body, Headersjj)
+	if e != nil { u.Pe(e); return }
+
+	t.Logf("response status: %d %s\n", r.R.StatusCode, r.R.Status)
+	t.Logf("response body: %s\n", r.Data)
+}
+
+func TestPutString(t *testing.T) {
+	url := "https://jsonplaceholder.typicode.com/posts/1"
+	body := `{
+		"id": 1,
+		"title": "title2",
+		"body": "body2",
+		"userId": 102
+	}`
+
+	r, e := Put(url, body, Headersjj)
 	if e != nil { u.Pe(e); return }
 
 	t.Logf("response status: %d %s\n", r.R.StatusCode, r.R.Status)

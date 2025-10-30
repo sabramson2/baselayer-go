@@ -17,7 +17,27 @@ func Pe(e error) {
 	fmt.Printf("!!! error: %s\n", e)
 }
 
+func P(s string) {
+	fmt.Println(s)
+}
+
+func Pf(s string, args []string) {
+	fmt.Printf(s, StringSliceToSliceAny(args)...)
+}
+
+func E(s string) error {
+	return fmt.Errorf(s, nil)
+}
+
+func Ef(s string, args []string) error {
+	return fmt.Errorf(s, StringSliceToSliceAny(args)...)
+}
+
 //----------------------------------------
+/*
+given an env var holding the path to a json file, load that json file
+and return it as a map[string]any
+*/
 func LoadConfig(envVarName string) (map[string]any, error) {
 	filePath := os.Getenv(envVarName)
 	if filePath == "" {
@@ -96,9 +116,13 @@ func StringToJsonArray(s string) ([]any, error) {
 //----------------------------------------
 func StringToSliceAny(s string) []any {
 	parts := strings.Split(s, " ")
-	partsAny := make([]any, len(parts))
-	for i := range parts {
-		partsAny[i] = any(parts[i])
+	return StringSliceToSliceAny(parts)
+}
+
+func StringSliceToSliceAny(s []string) []any {
+	partsAny := make([]any, len(s))
+	for i := range s {
+		partsAny[i] = any(s[i])
 	}
 	return partsAny
 }
