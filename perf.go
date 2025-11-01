@@ -1,4 +1,4 @@
-package perf
+package baselayergo
 
 import (
 	f "fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 //----------------------------------------
-type Result struct {
+type TimeItResult struct {
 	Count int64
 	Avg int64
 	P50 int64
@@ -16,14 +16,14 @@ type Result struct {
 	Values []int64
 }
 
-func (r *Result) PrintWithValues() {
+func (r *TimeItResult) PrintWithValues() {
 	for i := range(len(r.Values)) {
 		f.Printf("%d %d\n", i, r.Values[i])
 	}
 	r.Print()
 }
 
-func (r *Result) Print() {
+func (r *TimeItResult) Print() {
 	f.Printf("avg: %d\n", r.Avg)
 	f.Printf("p50: %d\n", r.P50)
 	f.Printf("p90: %d\n", r.P90)
@@ -40,7 +40,7 @@ func TimeItSingle(f func()) int64{
 }
 
 //----------------------------------------
-func TimeItMany(count int64, f func()) *Result {
+func TimeItMany(count int64, f func()) *TimeItResult {
 	allTimes := make([]int64, count)
 
 	var sum int64
@@ -58,7 +58,7 @@ func TimeItMany(count int64, f func()) *Result {
 	p90Index := int64(float64(count) * 0.9)
 	p99Index := int64(float64(count) * 0.99)
 
-	return &Result {
+	return &TimeItResult {
 		count,
 		avgTime,
 		allTimes[p50Index],

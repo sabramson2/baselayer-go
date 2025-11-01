@@ -1,4 +1,4 @@
-package util
+package baselayergo
 
 import (
 	"bufio"
@@ -31,6 +31,10 @@ func E(s string) error {
 
 func Ef(s string, args ...string) error {
 	return fmt.Errorf(s, StringSliceToSliceAny(args)...)
+}
+
+func Sf(s string, args ...string) string {
+	return fmt.Sprintf(s, StringSliceToSliceAny(args)...)
 }
 
 //----------------------------------------
