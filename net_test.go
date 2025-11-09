@@ -1,19 +1,17 @@
-package net
+package baselayergo
 
 import (
 	"testing"
-
-	bl "github.com/sabramson2/baselayer-go"
 )
 
 //----------------------------------------
 func TestGet(t *testing.T) {
-	req := bl.Req {
+	req := Req {
 		"https://jsonplaceholder.typicode.com/posts/1",
 		"",
 		nil,
 	}
-	r, e := bl.Getj(&req)
+	r, e := Getj(&req)
 	if e != nil { t.Errorf("error: %s", e); return }
 
 	t.Log(r)
@@ -24,7 +22,7 @@ func TestGet(t *testing.T) {
 
 //----------------------------------------
 func TestPost(t *testing.T) {
-	req := bl.Req {
+	req := Req {
 		"https://jsonplaceholder.typicode.com/posts",
 		`
 		{
@@ -34,7 +32,7 @@ func TestPost(t *testing.T) {
 		`,
 		nil,
 	}
-	r, e := bl.Postjj(&req)
+	r, e := Postjj(&req)
 	if e != nil { t.Errorf("error: %s", e); return }
 
 	t.Logf("a = %s\n", r.Data["a"].(string))
@@ -51,8 +49,8 @@ func TestPostString(t *testing.T) {
 		"userId": 102
 	}`
 
-	r, e := bl.Post(url, body, bl.Headersjj)
-	if e != nil { bl.Pe(e); return }
+	r, e := Post(url, body, Headersjj)
+	if e != nil { Pe(e); return }
 
 	t.Logf("response status: %d %s\n", r.R.StatusCode, r.R.Status)
 	t.Logf("response body: %s\n", r.Data)
@@ -67,8 +65,8 @@ func TestPutString(t *testing.T) {
 		"userId": 102
 	}`
 
-	r, e := bl.Put(url, body, bl.Headersjj)
-	if e != nil { bl.Pe(e); return }
+	r, e := Put(url, body, Headersjj)
+	if e != nil { Pe(e); return }
 
 	t.Logf("response status: %d %s\n", r.R.StatusCode, r.R.Status)
 	t.Logf("response body: %s\n", r.Data)
@@ -76,8 +74,8 @@ func TestPutString(t *testing.T) {
 
 func TestGetString(t *testing.T) {
 	url := "https://jsonplaceholder.typicode.com/posts/1"
-	r, e := bl.Get(url, bl.Headersj)
-	if e != nil { bl.Pe(e); return }
+	r, e := Get(url, Headersj)
+	if e != nil { Pe(e); return }
 
 	t.Logf("response status: %d %s\n", r.R.StatusCode, r.R.Status)
 	t.Logf("response body: %s\n", r.Data)

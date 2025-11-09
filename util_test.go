@@ -1,13 +1,12 @@
-package util
+package baselayergo
 
 import (
 	"testing"
-
-	bl "github.com/sabramson2/baselayer-go"
 )
 
 func TestLoadFile1(t *testing.T) {
-	config, e := bl.LoadConfig("TEST_GO_JSON")
+	// export TEST_GO_JSON="/Users/stephen/tmp/test123.json"
+	config, e := LoadConfig("TEST_GO_JSON")
 	if e != nil {
 		t.Errorf("error getting config: %s", e)
 	}
@@ -22,21 +21,21 @@ func TestWriteFile(t *testing.T) {
 	"data": "."
 }
 `
-	e := bl.WriteFile("/Users/stephen/tmp/test123.json", testData)
+	e := WriteFile("/Users/stephen/tmp/test123.json", testData)
 	if e != nil {
 		t.Errorf("there was an error writing the file: %s", e)
 	}
 }
 
 func TestReadFileToString(t *testing.T) {
-	fileData, e := bl.ReadFileToString("/Users/stephen/tmp/test123.json")
+	fileData, e := ReadFileToString("/Users/stephen/tmp/test123.json")
 	if e != nil { t.Errorf("error: %s", e); return }
 	t.Log("here is the file data:")
 	t.Log(fileData)
 }
 
 func TestReadFileToLines(t *testing.T) {
-	lines, e := bl.ReadFileToLines("/Users/stephen/tmp/test123.json")
+	lines, e := ReadFileToLines("/Users/stephen/tmp/test123.json")
 	if e != nil { t.Errorf("error: %s", e); return }
 	t.Log("here is the file data:")
 	for i := range(len(lines)) {
@@ -52,32 +51,32 @@ func TestStringToJson(t *testing.T) {
 			"1", "2", "3"
 		]
 	}`
-	r, _ := bl.StringToJson(s)
+	r, _ := StringToJson(s)
 	t.Logf("a = %s\n", r["a"].(string))
-	js, _ := bl.JsonToString(r)
+	js, _ := JsonToString(r)
 	t.Logf("%s\n", js)
 }
 
 func TestStringToJsonArray(t *testing.T) {
 	s := `[ "1", "2", "3" ]`
-	r, _ := bl.StringToJsonArray(s)
+	r, _ := StringToJsonArray(s)
 	t.Logf("elem 0 = %s\n", r[0].(string))
-	js, _ := bl.JsonToString(r)
+	js, _ := JsonToString(r)
 	t.Logf("%s\n", js)
 }
 
 func TestArrays(t *testing.T) {
 	s := "a b c"
-	t.Logf("first = %s, second = %s, third = %s\n", bl.StringToSliceAny(s)...)
+	t.Logf("first = %s, second = %s, third = %s\n", StringToSliceAny(s)...)
 }
 
 func TestRandNumString(t *testing.T) {
-	num := bl.RandNumString(20)
+	num := RandNumString(20)
 	t.Logf("%s\n", num)
 }
 
 func TestFormatPrinting(t *testing.T) {
-	bl.P("foo")
-	bl.Pf("foo %s\n", "bar")
-	bl.Pe(bl.Ef("some error %s", "errorfoo"))
+	P("foo")
+	Pf("foo %s\n", "bar")
+	Pe(Ef("some error %s", "errorfoo"))
 }

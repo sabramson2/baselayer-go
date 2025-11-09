@@ -21,8 +21,9 @@ func P(s string) {
 	fmt.Println(s)
 }
 
-func Pf(s string, args ...string) {
-	fmt.Printf(s, StringSliceToSliceAny(args)...)
+func Pf(s string, args ...any) {
+	//fmt.Printf(s, StringSliceToSliceAny(args)...)
+	fmt.Printf(s, args...)
 }
 
 func E(s string) error {
@@ -123,6 +124,7 @@ func StringToSliceAny(s string) []any {
 	return StringSliceToSliceAny(parts)
 }
 
+//----------------------------------------
 func StringSliceToSliceAny(s []string) []any {
 	partsAny := make([]any, len(s))
 	for i := range s {
