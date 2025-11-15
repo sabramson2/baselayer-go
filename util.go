@@ -13,16 +13,17 @@ func UtilTest() string {
 	return "hello from util package"
 }
 
+//----------------------------------------
+// shortcuts for printing or string formatting
 func Pe(e error) {
 	fmt.Printf("!!! error: %s\n", e)
 }
 
-func P(s string) {
-	fmt.Println(s)
+func P(s ...any) {
+	fmt.Println(s...)
 }
 
 func Pf(s string, args ...any) {
-	//fmt.Printf(s, StringSliceToSliceAny(args)...)
 	fmt.Printf(s, args...)
 }
 
@@ -30,12 +31,12 @@ func E(s string) error {
 	return fmt.Errorf(s, nil)
 }
 
-func Ef(s string, args ...string) error {
-	return fmt.Errorf(s, StringSliceToSliceAny(args)...)
+func Ef(s string, args ...any) error {
+	return fmt.Errorf(s, args...)
 }
 
-func Sf(s string, args ...string) string {
-	return fmt.Sprintf(s, StringSliceToSliceAny(args)...)
+func Sf(s string, args ...any) string {
+	return fmt.Sprintf(s, args...)
 }
 
 //----------------------------------------

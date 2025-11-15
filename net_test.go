@@ -20,6 +20,20 @@ func TestGet(t *testing.T) {
 	}
 }
 
+func TestGet2(t *testing.T) {
+	r, e := NewReqBuilder("GET", "https://jsonplaceholder.typicode.com/posts/1").
+		TypeJson().
+		Do()
+	if e != nil {
+		t.Errorf("error: %e\n", e)
+	}
+	j, _ := StringToJson(r.Data)
+
+	Pf("v = %v\n", j)
+	Pf("userId = %d\n", int(j["userId"].(float64)))
+	Pf("body = %s\n", j["body"].(string))
+}
+
 //----------------------------------------
 func TestPost(t *testing.T) {
 	req := Req {
@@ -37,6 +51,24 @@ func TestPost(t *testing.T) {
 
 	t.Logf("a = %s\n", r.Data["a"].(string))
 	t.Logf("id = %d\n", int(r.Data["id"].(float64)))
+}
+
+//----------------------------------------
+func TestPost2(t *testing.T) {
+	body := `{
+		"id": 1,
+		"title": "title2",
+		"body": "body2",
+		"userId": 102
+	}`
+	r, e := NewReqBuilder("POST", "https://jsonplaceholder.typicode.com/posts").
+		TypeJson().
+		SetBody(body).
+		Do()
+	if e != nil { t.Errorf("error: %s", e); return }
+	//_, _ := StringToJson(r.Data)
+	Pf("response = %v\n", r)
+	Pf("value = %s\n", r.Data)
 }
 
 //----------------------------------------

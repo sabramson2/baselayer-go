@@ -43,6 +43,42 @@ type StringResponse struct {
 }
 
 //----------------------------------------
+type ReqBuilder struct {
+	Method string
+	Url string
+	Headers map[string]string
+	Body string
+}
+
+func NewReqBuilder(method string, url string) *ReqBuilder {
+	return &ReqBuilder{
+		Method: method,
+		Url: url,
+		Headers: map[string]string{},
+	}
+}
+
+func (rb *ReqBuilder) TypeJson() *ReqBuilder {
+	rb.Headers["Accepts"] = "application/json"
+	rb.Headers["Content-Type"] = "application/json"
+	return rb
+}
+
+func (rb *ReqBuilder) SetBody(body string) *ReqBuilder {
+	rb.Body = body
+	return rb
+}
+
+func (rb *ReqBuilder) SetToken(token string) *ReqBuilder {
+	rb.Headers["Authorization"] = Sf("Bearer %s", token)
+	return rb
+}
+
+func (rb *ReqBuilder) Do() (*StringResponse, error) {
+	return DoRequest(rb.Method, rb.Url, rb.Body, rb.Headers)
+}
+
+//----------------------------------------
 // refactor post/get to allow for plugging in other response format processors
 
 //----------------------------------------
